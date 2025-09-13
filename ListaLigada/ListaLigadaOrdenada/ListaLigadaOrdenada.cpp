@@ -5,6 +5,7 @@ using namespace std;
 struct NO {
 	int valor;
 	NO* prox;
+	NO* ant;
 };
 
 NO* primeiro = NULL;
@@ -31,7 +32,7 @@ void menu()
 	int op = 0;
 	while (op != 7) {
 		system("cls"); // somente no windows
-		cout << "Menu Lista Ligada";
+		cout << "Menu Lista Ligada Ordenada";
 		cout << endl << endl;
 		cout << "1 - Inicializar Lista \n";
 		cout << "2 - Exibir quantidade de elementos \n";
@@ -120,25 +121,57 @@ void inserirElemento()
 	{
 		return;
 	}
+	NO* anterior = NULL;
+	NO* atual = primeiro;
 
 	cout << "Digite o elemento: ";
 	cin >> novo->valor;
-	novo->prox = NULL;
-
+	NO* procurar = posicaoElemento(novo->valor);
+	if (procurar != NULL) {
+		cout << "JA TEM" << endl;
+		free(novo);
+		return;
+	}
 	if (primeiro == NULL)
 	{
 		primeiro = novo;
+		return;
 	}
-	else
-	{
-		// procura o final da lista
-		NO* aux = primeiro;
-		while (aux->prox != NULL) {
-			aux = aux->prox;
+	else {
+
+		while (atual != NULL) {
+
+
+			if (primeiro->valor > novo->valor) {
+				primeiro = novo;
+				primeiro->prox = atual;
+				cout << "TESTE" << endl;
+
+				return;
+				
+			}
+			else if (atual->valor > novo->valor) {
+				anterior->prox = novo;
+				novo->prox = atual;
+				cout << "TESTE" << endl;
+
+				return;
+			}
+			else if (atual->prox == NULL) {
+				atual->prox = novo;
+				cout << "TESTE" << endl;
+
+				return;
+			}
+			
+
+		
 		}
-		aux->prox = novo;
 	}
+
+	
 }
+
 
 void excluirElemento()
 {
@@ -147,7 +180,38 @@ void excluirElemento()
 
 void buscarElemento()
 {
+	int buscar;
+	cout << "Fala oq tu quer ver:\n";
+	cin >> buscar;
 
+	NO* aux = primeiro;
+	while (aux != NULL) {
+		if (aux->valor == buscar) {
+			cout << "ENCONTRADO" << endl;
+			return;
+		}
+		else if (aux->valor > buscar) {
+			cout << "Tem Não" << endl;
+			return;
+		}
+		aux->ant = aux;
+		aux = aux->prox;
+
+	}
+	
+}
+		NO* posicaoElemento(int numero)
+{
+		NO* aux = primeiro;
+		aux->ant = primeiro;
+	while (aux != NULL) {
+		if (aux->valor == numero) {
+			return aux;
+		}
+		aux->ant = aux;
+		aux = aux->prox;
+	}
+	return NULL;
 }
 
 
