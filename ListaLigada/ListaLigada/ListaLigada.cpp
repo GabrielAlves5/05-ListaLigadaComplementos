@@ -4,11 +4,10 @@ using namespace std;
 // defini��o de tipo
 struct NO {
     int valor;
-    NO* ant;
     NO* prox;
-
+    NO* ant;
 };
-
+NO* volta = NULL;
 NO* primeiro = NULL;
 NO* ultimo = NULL;
 
@@ -115,8 +114,7 @@ void exibirElementos()
         while (aux != NULL) {
             cout << aux->valor << endl;
             aux = aux->prox;
-            
-        }    
+        }
     }
 }
 
@@ -134,55 +132,57 @@ void inserirElemento()
     novo->prox = NULL;
     novo->ant = NULL;
 
-
     if (primeiro == NULL)
     {
-        ultimo = novo;
         primeiro = novo;
-    }
-    else if (posicaoElemento(novo->valor) != NULL) {
-        cout << "O numero ja existe" << endl;
-        return;
-    }
-    else
-    {
-        ultimo->prox = novo;
         ultimo = novo;
-    
+    }
+    else {
+        if (posicaoElemento(novo->valor) != NULL) {
+            cout << "O numero ja existe" << endl;
+            return;
+        }
+        else
+            ultimo->prox = novo;
+        ultimo = novo;
     }
 }
 
 void excluirElemento()
 {
-    int  val;
+    int valor;
     cout << "Digite o valor a ser excluido: ";
-    cin >> val;
-    NO* apaga = posicaoElemento(val);
-    if (apaga->valor == NULL) {
-        cout << "Primeiramente q isso nem existe \n";
+    cin >> valor;
+
+    // Busca o elemento
+    //Aqui ele ta pegando o valor e colocando pra ver se ta no no
+    NO* apagar = posicaoElemento(valor);
+    //se for nulo ele fala q n tem
+    if (apagar == NULL) {
+        cout << "Coloca um numero que existe pra inicio de conversa" << endl;
+        free(apagar);
         return;
     }
-    if (primeiro->valor == val) {
-        primeiro = primeiro->prox;
-        free(apaga);
-        cout << "Pronto\n";
-        return;
-    }
-    else if (apaga->valor == ultimo->valor) {
-        ultimo = ultimo->ant;
+    //apaga o ultimo
+    if (apagar->valor == ultimo->valor)
+    {
+        ultimo = volta;
         ultimo->prox = NULL;
-        free(apaga);
+        free(apagar);
         return;
+    }
+    if (primeiro->valor == valor)
+    {
+        primeiro = primeiro->prox;
+        free(apagar);
     }
     else {
-        apaga->ant->prox = apaga->prox;
-        apaga->prox->ant = apaga->ant;
-        free(apaga);
-            cout << "mata meio\n";
-            return;
+        volta->prox = apagar->prox;
+        free(apagar);
     }
-}
 
+
+}
 
 void buscarElemento()
 {
@@ -191,7 +191,7 @@ void buscarElemento()
     cin >> b;
 
     NO* elemento = posicaoElemento(b);
-    if (elemento != NULL  ) {
+    if (elemento != NULL) {
 
     }
     else {
@@ -204,15 +204,16 @@ void buscarElemento()
 // retorna um ponteiro para o elemento buscado
 // ou NULL se o elemento n�o estiver na lista
 NO* posicaoElemento(int numero)
-{
+{   
     NO* aux = primeiro;
-    aux->ant = primeiro;
+    volta = primeiro;
     while (aux != NULL) {
         if (aux->valor == numero) {
             return aux;
+            return volta;
         }
-        aux->ant = aux;
+        volta = aux;
         aux = aux->prox;
     }
     return NULL;
-}
+} 
