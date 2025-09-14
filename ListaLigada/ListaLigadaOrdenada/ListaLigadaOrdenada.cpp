@@ -165,30 +165,28 @@ void excluirElemento()
 		anterior = atual;
 		atual = atual->prox;
 	}
-	if (numero < atual->valor) {
-		cout << "NEM TEM";
-		return;
+	if (numero < atual->valor && numero > anterior->valor) {
+		cout << "NEM TEM\n";
 	}
 	if (atual->valor == numero) {
 
 		if (atual->valor == primeiro->valor) {
 			primeiro = atual->prox;
 			free(atual);
-			cout << "APAGADO (SOM DE VITORIA DO SENNA)";
-			return;
+			cout << "APAGADO (SOM DE VITORIA DO SENNA)\n";
 
 		}
 		else
 		{
 			anterior->prox = atual->prox;
 			free(atual);
-			cout << "APAGADO (SOM DE VITORIA DO SENNA)";
-			return;
-		
+			cout << "APAGADO (SOM DE VITORIA DO SENNA)\n";
+
 		}
 
-	
+
 	}	
+	
 	
 }
 
